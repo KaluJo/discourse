@@ -8,4 +8,4 @@ const Textbox = () => {
     );
 };
 
-export default Avatar;
+export default Textbox;
