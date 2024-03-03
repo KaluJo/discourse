@@ -17,24 +17,23 @@ const Main = () => {
 
   const [videoUrl, setVideoUrl] = useState('');
   const [videoUrl2, setVideoUrl2] = useState('');
+  const [videoUrl3, setVideoUrl3] = useState('');
+  const [videoUrl4, setVideoUrl4] = useState('');
 
-  const [videoReady, setVideoReady] = useState(false);
   const [videoOneReady, setVideoOneReady] = useState(false);
   const [videoTwoReady, setVideoTwoReady] = useState(false);
+  const [videoThreeReady, setVideoThreeReady] = useState(false);
+  const [videoFourReady, setVideoFourReady] = useState(false);
 
   const handleNextClick = async () => {
-    setVideoReady(false);
-    await generateResponse(topic, setVideoUrl, setVideoUrl2, setVideoOneReady, setVideoTwoReady);
-    if (videoReady) {
-      navigate("/video", { state: { topic, videoUrl, videoUrl2 } });
-    }
+    await generateResponse(topic, setVideoUrl, setVideoUrl2, setVideoUrl3, setVideoUrl4, setVideoOneReady, setVideoTwoReady, setVideoThreeReady, setVideoFourReady, );
   };
 
   useEffect(() => {
-    if (videoOneReady && videoTwoReady) {
-      navigate("/video", { state: { topic, videoUrl, videoUrl2 } });
+    if (videoOneReady && videoTwoReady && videoThreeReady && videoFourReady) {
+      navigate("/video", { state: { topic, videoUrl, videoUrl2, videoUrl3, videoUrl4 } });
     }
-  }, [videoOneReady, videoTwoReady]);
+  }, [videoOneReady, videoTwoReady, videoThreeReady, videoFourReady]);
 
   return (
     <BackgroundWrapper>

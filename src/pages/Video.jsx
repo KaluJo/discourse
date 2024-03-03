@@ -1,29 +1,33 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import {
   Flex,
   Text,
-  Heading,
   Box,
-  Input,
   Button,
-  Center,
 } from "@chakra-ui/react";
 import { useLocation } from "react-router-dom";
 
 import BackgroundWrapper from "../components/BackgroundWrapper";
+import ProgressBar from "../components/ProgressBar";
 
 const Video = () => {
   const { state } = useLocation();
-  const { topic, videoUrl, videoUrl2 } = state;
+  const { topic, videoUrl, videoUrl2, videoUrl3, videoUrl4 } = state;
+
+  const [currentVideos, setCurrentVideos] = useState({ first: videoUrl, second: videoUrl2 });
 
   const videoRef1 = useRef(null);
   const videoRef2 = useRef(null);
 
   useEffect(() => {
     if (videoRef1.current) {
-      videoRef1.current.play();
+      const timer = setTimeout(() => {
+        videoRef1.current.play();
+      }, 2000);
+  
+      return () => clearTimeout(timer);
     }
-  }, []);
+  }, [currentVideos.first]);
 
   const handleFirstVideoEnd = () => {
     if (videoRef2.current) {
@@ -31,9 +35,11 @@ const Video = () => {
     }
   };
 
-  console.log(videoUrl);
-
-  console.log(videoUrl2);
+  const handleSecondVideoEnd = () => {
+    if (currentVideos.first === videoUrl && currentVideos.second === videoUrl2) {
+      setCurrentVideos({ first: videoUrl3, second: videoUrl4 });
+    }
+  };
 
   return (
     <BackgroundWrapper>
@@ -43,54 +49,34 @@ const Video = () => {
           {topic}
         </Box>
       </Text>
-      <Box
-          // border="1px"
-          borderColor="white"
-          borderStyle="solid"
-          borderRadius="lg"
-          p={0}
-        >
       <Flex justify={"center"}>
-        {videoUrl && (
-          <video
-            controls
-            src={videoUrl}
-            ref={videoRef1}
-            onEnded={handleFirstVideoEnd}
-            style={{ marginTop: '20px', width: '40%' }}
-          />
-        )}
-        {videoUrl2 && (
-          <video
-            controls
-            src={videoUrl2}
-            ref={videoRef2}
-            style={{ marginTop: '20px', width: '40%', display: 'none' }} // Initially hide the second video
-          />
-        )}
+        <video
+          controls
+          src={currentVideos.first}
+          ref={videoRef1}
+          onEnded={handleFirstVideoEnd}
+          style={{ marginTop: '20px', width: '40%' }}
+        />
+        <video
+          controls
+          src={currentVideos.second}
+          ref={videoRef2}
+          onEnded={handleSecondVideoEnd}
+          style={{ marginTop: '20px', width: '40%' }}
+        />
       </Flex>
-      </Box>
       <Box
-        border="1px"
-        borderColor="white"
-        borderStyle="solid"
-        px={5}
         mt={5}
-        borderRadius="5rem"
         _hover={{
           bg: "gray.700",
           cursor: "pointer",
         }}
       >
-        <Button
-          variant="unstyled"
-          _hover={{
-            bg: "transparent",
-          }}
-        >
+        <Button variant="unstyled" _hover={{ bg: "transparent" }}>
           <Text fontSize="sm">← Generate a new prompt</Text>
         </Button>
       </Box>
+      <ProgressBar />
     </BackgroundWrapper>
   );
 };
