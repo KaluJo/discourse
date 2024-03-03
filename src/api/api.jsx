@@ -39,7 +39,7 @@ export async function generateResponse(topic, setAvatarVideoOneUrl, setAvatarVid
     console.log("NEGATIVE 2");
     console.log(scriptB_2);
 
-    const apiKey = "NmFiN2QyYmYyNzMzNGY1OThkYjVjMDliM2Q4ZGI3NTctMTcwOTI0NDg1OA==";
+    const apiKey = process.env.REACT_APP_HEYGEN_API_KEY;
 
     // Process for scriptA
     let resultA = await Promise.allSettled([createVideo(apiKey, scriptA, 1)]);
